@@ -158,7 +158,7 @@ class MessageLogger {
 
 	getDescription () {return "Allows you to log messages of servers and DMs while your discord client is running.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
