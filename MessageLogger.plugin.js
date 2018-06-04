@@ -158,11 +158,11 @@ class MessageLogger {
 
 	getDescription () {return "Allows you to log messages of servers and DMs while your discord client is running.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.0";}
 
 	getAuthor () {return "DevilBro";}
 
-	getRawUrl () {return "https://raw.githubusercontent.com/MessageLoggerBD/MessageLogger/MessageLogger.plugin.js";}
+	getRawUrl () {return "https://raw.githubusercontent.com/MessageLoggerBD/MessageLogger/master/MessageLogger.plugin.js";}
 	
 	getSettingsPanel () {
 		var enabled = BDFDB.loadAllData(this, "enabled");
