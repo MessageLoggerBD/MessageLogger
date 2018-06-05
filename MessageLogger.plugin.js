@@ -1,7 +1,7 @@
 //META{"name":"MessageLogger"}*//
 
 class MessageLogger {
-	initConstructor () {
+	initConstructor () {			
 		this.loggerButton =
 			`<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin} loggerButton" name="Note" width="16" height="16" viewBox="-150 -55 680 680">
 				<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
@@ -70,6 +70,20 @@ class MessageLogger {
 								<button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
 									<div class="${BDFDB.disCN.buttoncontents}">Ok</div>
 								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</span>`;
+			
+		this.imageModalMarkup =
+			`<span class="editchannels-modal DevilBro-modal">
+				<div class="${BDFDB.disCN.backdrop}"></div>
+				<div class="${BDFDB.disCN.modal}">
+					<div class="${BDFDB.disCN.modalinner}">
+						<div>
+							<div class="${BDFDB.disCN.imagewrapper}">
+								<img alt="">
 							</div>
 						</div>
 					</div>
@@ -158,7 +172,7 @@ class MessageLogger {
 
 	getDescription () {return "Allows you to log messages of servers and DMs while your discord client is running.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -249,6 +263,7 @@ class MessageLogger {
 			this.fs = require("fs");
 			this.path = require("path");
 			this.process = require("process");
+			this.request = require("request");
 			this.logsfolder = this.path.join(BDFDB.getPluginsFolder(), "Logs");
 			this.loggerqueues = {};
 			
@@ -256,9 +271,10 @@ class MessageLogger {
 			this.loggercancel = BDFDB.WebModules.monkeyPatch(this.MessageUtils, "receiveMessage", {after: (e) => {
 				let message = Object.assign({},e.methodArguments[1]);
 				message.guild_id = message.guild_id ? message.guild_id : "@me";
-				if (message.nonce && !logged.includes(message.id) && BDFDB.loadData(message.guild_id, this, "enabled")) {
+				if ((message.nonce || message.attachments.length > 0) && !logged.includes(message.id) && BDFDB.loadData(message.guild_id, this, "enabled")) {
 					logged.push(message.id);
 					this.addLog(message);
+					console.log(message);
 				}
 			}});
 			
@@ -307,6 +323,25 @@ class MessageLogger {
 		this.writeLog(filepath, message);
 	}
 	
+	downloadImage (message, url) {
+		let filepath = this.path.join(this.logsfolder, message.guild_id, message.channel_id + "_images");
+		if (!this.fs.existsSync(filepath)) {
+			let folder = this.logsfolder;
+			if (!this.fs.existsSync(folder)) this.fs.mkdirSync(folder);
+			folder = this.path.join(folder, message.guild_id);
+			if (!this.fs.existsSync(folder)) this.fs.mkdirSync(folder);
+			folder = this.path.join(folder, message.channel_id + "_images");
+			if (!this.fs.existsSync(folder)) this.fs.mkdirSync(folder);
+		}
+		let filename = url.split("/");
+		filename = filename[filename.length-2] + "_" + filename[filename.length-1].split("?width=")[0];
+		this.request.get({url: url, encoding: 'binary'}, (err, response, body) => {
+			this.fs.writeFile(this.path.join(filepath, filename), body, "binary", (error) => {
+				if (error) console.error("The image could not be archived: " + error);
+			}); 
+		});
+	}
+	
 	writeLog (filepath, message) {
 		if (!this.loggerqueues[message.channel_id]) this.loggerqueues[message.channel_id] = {queue:[], running:false};
 		var runQueue = () => {
@@ -321,12 +356,22 @@ class MessageLogger {
 							runQueue();
 						}
 						else {
-							var oldlog = response.toString();
-							this.fs.writeFile(filepath, (oldlog.length > 0 ? oldlog + "\n" : "") + (new Date(logmessage.timestamp)).toLocaleString() + " @ " + logmessage.author.username.replace(/\s/g, "") + ": " + logmessage.content.replace(/\n/g, "\\n") + " (author:" + logmessage.author.id + " message:" + logmessage.id + ")", (error) => {
-								if (error) console.error("The logfile could not be created: " + error);
-								this.loggerqueues[message.channel_id].running = false;
-								runQueue();
-							});
+							let oldlog = response.toString();
+							let attachstring = "";
+							for (let file of logmessage.attachments) {
+								if (file.width && file.height) {
+									console.log(file);
+									attachstring += file.url + "?width=" + file.width + "&height=" + file.height + " ";
+									this.downloadImage(logmessage, file.url);
+								}
+							}
+							if (logmessage.content || attachstring) {
+								this.fs.writeFile(filepath, (oldlog.length > 0 ? oldlog + "\n" : "") + (new Date(logmessage.timestamp)).toLocaleString() + " @ " + logmessage.author.username.replace(/\s/g, "") + ": " + logmessage.content.replace(/\n/g, "\\n") + " (author:" + logmessage.author.id + " message:" + logmessage.id + ") (filesML:" + attachstring.slice(0,-1) + ")", (error) => {
+									if (error) console.error("The logfile could not be created: " + error);
+									this.loggerqueues[message.channel_id].running = false;
+									runQueue();
+								});
+							}
 						}
 					});
 				}
@@ -350,22 +395,65 @@ class MessageLogger {
 			let ids = / \(author:([0-9]*?) message:([0-9]*?)\)/.exec(log);
 			let authorid = ids[1];
 			let messageid = ids[2];
+			let files = / \(filesML:(.*?)\)/.exec(log) || ["",""];
 			let user = this.UserStore.getUser(authorid);
 			let message = this.MessageStore.getMessage(channel, messageid);
 			if (user) {
 				let entry = $(this.logEntryMarkup);
 				let member = this.MemberStore.getMember(authorid);
-				let messagecontent = message ? message.content : log.replace(ids[0], "").split(": ")[1];
+				let messagestring = message ? message.content : log.replace(ids[0], "").replace(files[0], "").split(": ")[1];
+				let filestring = "";
+				for (let file of files[1].split(" ")) {
+					if (file) {
+						filestring += `<a title="${file}" class="${BDFDB.disCN.anchor}" href="${file.split("?width=")[0]}" rel="noreferrer noopener" target="_blank" role="button">${file.split("?width=")[0]}</a> `;
+					}
+				}
 				entry.find(".log-status").addClass(message ? "notdeleted" : "deleted").on("mouseenter", (e) => {
 					BDFDB.createTooltip(message ? "Not Deleted" : "Deleted", e.currentTarget, {type:"top"});
 				});
 				entry.find(".log-time").text(message ? message.timestamp._i.toLocaleString() : log.split(" @ ")[0]);
 				entry.find(".log-guild").css("background-image", `url(${BDFDB.getUserAvatar(user.id)})`);
-				entry.find(".log-content").text((member && member.nickname ? member.nickname : user.username) + ": " + messagecontent).on("click", () => {
-					let contentModal = $(this.contentModalMarkup);
-					contentModal.find(".message-content").text(messagecontent); 
-					BDFDB.appendModal(contentModal);
-				});
+				entry.find(".log-content")
+					.text((member && member.nickname ? member.nickname : user.username) + ": " + (messagestring + (files[1] ? (" Images: " + files[1]) : "")).trim())
+					.on("click." + this.getName(), () => {
+						let contentModal = $(this.contentModalMarkup);
+						contentModal
+							.find(".message-content").html((BDFDB.encodeToHTML(messagestring) + " " + (filestring ? ((messagestring ? "\n" : "") + "Sent Images: " + filestring) : "")).trim())
+							.on("click." + this.getName(), BDFDB.dotCN.anchor, (e) => {
+								e.preventDefault();
+								console.log(e.currentTarget.title);
+								let imageModal = $(this.imageModalMarkup);
+								let filename = e.currentTarget.href.split("/");
+								filename = filename[filename.length-2] + "_" + filename[filename.length-1];
+								let filepath = this.path.join(this.logsfolder, server, channel + "_images", filename);
+								require("fs").readFile(filepath, (error, result) => {
+									if (error) {
+										console.error("The image could not be loaded (no longer archived): " + error);
+										alert("The image " + filepath + " no longer exists.");
+									}
+									else {
+										let width = e.currentTarget.title.split("?width=");
+										let height = width[1].split("&height=")[1];
+										width = width[1].split("&height=")[0];
+										let resizeX = (document.firstElementChild.clientWidth/width) * 0.71;
+										let resizeY = (document.firstElementChild.clientHeight/height) * 0.57;
+										width = width * (resizeX < resizeY ? resizeX : resizeY);
+										height = height * (resizeX < resizeY ? resizeX : resizeY);
+										imageModal
+											.find(BDFDB.dotCN.imagewrapper)
+												.css("width", width + "px")
+												.css("height", height + "px")
+												.css("pointer-events", "none")
+												.find("img")
+													.css("width", width + "px")
+													.css("height", height + "px")
+													.attr("src", "data:image/jpg;base64," + result.toString("base64"));
+										BDFDB.appendModal(imageModal);
+									}
+								});
+							});
+						BDFDB.appendModal(contentModal);
+					});
 				timeLogModal.find(".entries").append(entry).append(this.dividerMarkup);
 			}
 		}
