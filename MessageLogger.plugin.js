@@ -274,7 +274,6 @@ class MessageLogger {
 				if ((message.nonce || message.attachments.length > 0) && !logged.includes(message.id) && BDFDB.loadData(message.guild_id, this, "enabled")) {
 					logged.push(message.id);
 					this.addLog(message);
-					console.log(message);
 				}
 			}});
 			
@@ -360,7 +359,6 @@ class MessageLogger {
 							let attachstring = "";
 							for (let file of logmessage.attachments) {
 								if (file.width && file.height) {
-									console.log(file);
 									attachstring += file.url + "?width=" + file.width + "&height=" + file.height + " ";
 									this.downloadImage(logmessage, file.url);
 								}
@@ -421,7 +419,6 @@ class MessageLogger {
 							.find(".message-content").html((BDFDB.encodeToHTML(messagestring) + " " + (filestring ? ((messagestring ? "\n" : "") + "Sent Images: " + filestring) : "")).trim())
 							.on("click." + this.getName(), BDFDB.dotCN.anchor, (e) => {
 								e.preventDefault();
-								console.log(e.currentTarget.title);
 								let imageModal = $(this.imageModalMarkup);
 								let filename = e.currentTarget.href.split("/");
 								filename = filename[filename.length-2] + "_" + filename[filename.length-1];
