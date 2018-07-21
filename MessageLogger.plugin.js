@@ -1,17 +1,19 @@
 //META{"name":"MessageLogger"}*//
 
 class MessageLogger {
-	initConstructor () {			
+	initConstructor () {
 		this.loggerButton =
-			`<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin} loggerButton" name="Note" width="16" height="16" viewBox="-150 -55 680 680">
-				<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-					<path d="M496.093,189.613c-18.643-15.674-47.168-13.807-63.354,5.493l-9.727,11.508l68.945,57.849l9.288-11.466 C517.22,233.997,515.199,205.621,496.093,189.613z" fill="currentColor"/>
-					<path d="M301.375,350.534l-5.131,6.072c-4.453,5.332-7.661,11.704-9.272,18.457l-13.945,58.359 c-1.318,5.522,0.601,11.323,4.951,14.971c4.234,3.558,10.206,4.591,15.601,2.285l55.063-23.877 c6.372-2.769,12.085-7.031,16.538-12.319l5.149-6.092L301.375,350.534z" fill="currentColor"/>
-					<polygon points="403.656,229.517 320.733,327.631 389.683,385.487 472.601,287.366" fill="currentColor"/>
-					<path d="M376.02,66.504l-56.982-54.141c-5.387-5.107-12.014-8.115-18.999-10.069V90h89.052 C387.23,81.09,382.69,72.836,376.02,66.504z" fill="currentColor"/>
-					<path d="M257.792,368.091c2.681-11.221,8.027-21.841,15.439-30.718l116.807-138.214V120h-105c-8.291,0-15-6.709-15-15V0h-225 c-24.814,0-45,20.186-45,45v422c0,24.814,20.186,45,45,45h300c24.814,0,45-20.186,45-45v-35.459l-1.948,2.305 c-7.368,8.775-16.875,15.85-27.466,20.465l-55.107,23.892c-15.532,6.707-33.511,4.331-46.816-6.812 c-13.14-11.03-18.838-28.242-14.854-44.941L257.792,368.091z M75.038,90h150c8.291,0,15,6.709,15,15s-6.709,15-15,15h-150 c-8.291,0-15-6.709-15-15S66.747,90,75.038,90z M75.038,181h240c8.291,0,15,6.709,15,15s-6.709,15-15,15h-240 c-8.291,0-15-6.709-15-15S66.747,181,75.038,181z M195.038,391h-120c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15h120 c8.291,0,15,6.709,15,15C210.038,384.291,203.329,391,195.038,391z M75.038,301c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15 h180c8.291,0,15,6.709,15,15c0,8.291-6.709,15-15,15H75.038z" fill="currentColor"/>
-				</g>
-			</svg>`;
+			`<span class="${BDFDB.disCN.channelheadericonmargin} loggerButton">
+				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" name="Logs" width="16" height="16" viewBox="-150 -55 680 680">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path d="M496.093,189.613c-18.643-15.674-47.168-13.807-63.354,5.493l-9.727,11.508l68.945,57.849l9.288-11.466 C517.22,233.997,515.199,205.621,496.093,189.613z" fill="currentColor"/>
+						<path d="M301.375,350.534l-5.131,6.072c-4.453,5.332-7.661,11.704-9.272,18.457l-13.945,58.359 c-1.318,5.522,0.601,11.323,4.951,14.971c4.234,3.558,10.206,4.591,15.601,2.285l55.063-23.877 c6.372-2.769,12.085-7.031,16.538-12.319l5.149-6.092L301.375,350.534z" fill="currentColor"/>
+						<polygon points="403.656,229.517 320.733,327.631 389.683,385.487 472.601,287.366" fill="currentColor"/>
+						<path d="M376.02,66.504l-56.982-54.141c-5.387-5.107-12.014-8.115-18.999-10.069V90h89.052 C387.23,81.09,382.69,72.836,376.02,66.504z" fill="currentColor"/>
+						<path d="M257.792,368.091c2.681-11.221,8.027-21.841,15.439-30.718l116.807-138.214V120h-105c-8.291,0-15-6.709-15-15V0h-225 c-24.814,0-45,20.186-45,45v422c0,24.814,20.186,45,45,45h300c24.814,0,45-20.186,45-45v-35.459l-1.948,2.305 c-7.368,8.775-16.875,15.85-27.466,20.465l-55.107,23.892c-15.532,6.707-33.511,4.331-46.816-6.812 c-13.14-11.03-18.838-28.242-14.854-44.941L257.792,368.091z M75.038,90h150c8.291,0,15,6.709,15,15s-6.709,15-15,15h-150 c-8.291,0-15-6.709-15-15S66.747,90,75.038,90z M75.038,181h240c8.291,0,15,6.709,15,15s-6.709,15-15,15h-240 c-8.291,0-15-6.709-15-15S66.747,181,75.038,181z M195.038,391h-120c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15h120 c8.291,0,15,6.709,15,15C210.038,384.291,203.329,391,195.038,391z M75.038,301c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15 h180c8.291,0,15,6.709,15,15c0,8.291-6.709,15-15,15H75.038z" fill="currentColor"/>
+					</g>
+				</svg>
+			</span>`;
 		
 		this.timeLogModalMarkup =
 			`<span class="MessageLogger-modal MessageLogger-Log-modal DevilBro-modal">
@@ -172,7 +174,7 @@ class MessageLogger {
 
 	getDescription () {return "Allows you to log messages of servers and DMs while your discord client is running.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -296,7 +298,7 @@ class MessageLogger {
 			setTimeout(() => {
 				$(".loggerButton").remove();
 				$(this.loggerButton)
-					.insertBefore($(BDFDB.dotCN.channelheadericoninactive).parent().find(BDFDB.dotCN.channelheadersearch))
+					.insertBefore(BDFDB.dotCNS.channelheadertitle + BDFDB.dotCN.channelheadersearch)
 					.on("click." + this.getName(), (e) => {
 						this.showLogs();
 					})
@@ -423,7 +425,7 @@ class MessageLogger {
 								let filename = e.currentTarget.href.split("/");
 								filename = filename[filename.length-2] + "_" + filename[filename.length-1];
 								let filepath = this.path.join(this.logsfolder, server, channel + "_images", filename);
-								require("fs").readFile(filepath, (error, result) => {
+								this.fs.readFile(filepath, (error, result) => {
 									if (error) {
 										console.error("The image could not be loaded (no longer archived): " + error);
 										alert("The image " + filepath + " no longer exists.");
