@@ -169,7 +169,7 @@ class MessageLogger {
 
 	getDescription () {return "Allows you to log messages of servers and DMs while your discord client is running.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -265,7 +265,7 @@ class MessageLogger {
 			this.loggerqueues = {};
 			
 			var logged = [];
-			this.loggercancel = BDFDB.WebModules.monkeyPatch(this.MessageUtils, "receiveMessage", {after: (e) => {
+			BDFDB.WebModules.patch(this.MessageUtils, "receiveMessage", this, {after: (e) => {
 				let message = Object.assign({},e.methodArguments[1]);
 				message.guild_id = message.guild_id ? message.guild_id : "@me";
 				if ((message.nonce || message.attachments.length > 0) && !logged.includes(message.id) && BDFDB.loadData(message.guild_id, this, "enabled")) {
@@ -281,8 +281,6 @@ class MessageLogger {
 	stop () {
 		if (typeof BDFDB === "object") {
 			$(".loggerButton").remove();
-			
-			if (typeof this.loggercancel == "function") this.loggercancel();
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -386,7 +384,7 @@ class MessageLogger {
 		if (this.fs.existsSync(filepath)) logs = this.fs.readFileSync(filepath).toString().split("\n");
 		
 		let timeLogModal = $(this.timeLogModalMarkup);
-		for (let log of logs.reverse()) {
+		for (let log of logs.reverse().slice(0,100)) {
 			let ids = / \(author:([0-9]*?) message:([0-9]*?)\)/.exec(log);
 			let authorid = ids[1];
 			let messageid = ids[2];
