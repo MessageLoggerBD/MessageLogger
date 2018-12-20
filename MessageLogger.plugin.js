@@ -247,15 +247,15 @@ class MessageLogger {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.UserStore = BDFDB.WebModules.findByProperties(["getUsers"]);
-			this.MemberStore = BDFDB.WebModules.findByProperties(["getMembers"]);
-			this.MessageStore = BDFDB.WebModules.findByProperties(["getMessages"]);
-			this.GuildStore = BDFDB.WebModules.findByProperties(["getGuilds"]);
-			this.LastGuildStore = BDFDB.WebModules.findByProperties(["getLastSelectedGuildId"]);
-			this.ChannelStore = BDFDB.WebModules.findByProperties(["getChannels"]);
-			this.LastChannelStore = BDFDB.WebModules.findByProperties(["getLastSelectedChannelId"]);
-			this.IconUtils = BDFDB.WebModules.findByProperties(["getUserAvatarURL"]);
-			this.MessageUtils = BDFDB.WebModules.findByProperties(["receiveMessage"]);
+			this.UserStore = BDFDB.WebModules.findByProperties("getUsers");
+			this.MemberStore = BDFDB.WebModules.findByProperties("getMembers");
+			this.MessageStore = BDFDB.WebModules.findByProperties("getMessages");
+			this.GuildStore = BDFDB.WebModules.findByProperties("getGuilds");
+			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
+			this.ChannelStore = BDFDB.WebModules.findByProperties("getChannels");
+			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
+			this.IconUtils = BDFDB.WebModules.findByProperties("getUserAvatarURL");
+			this.MessageUtils = BDFDB.WebModules.findByProperties("receiveMessage");
 			
 			this.fs = require("fs");
 			this.path = require("path");
