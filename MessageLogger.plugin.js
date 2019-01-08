@@ -79,7 +79,7 @@ class MessageLogger {
 			</span>`;
 			
 		this.imageModalMarkup =
-			`<span class="editchannels-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
