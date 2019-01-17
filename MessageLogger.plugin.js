@@ -1,9 +1,23 @@
 //META{"name":"MessageLogger"}*//
 
 class MessageLogger {
+	getName () {return "MessageLogger";}
+
+	getVersion () {return "1.0.4";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Allows you to log messages of servers and DMs while your discord client is running.";}
+
+	getRawUrl () {return "https://raw.githubusercontent.com/MessageLoggerBD/MessageLogger/master/MessageLogger.plugin.js";}
+	
 	initConstructor () {
-		this.loggerButton =
-			`<span class="${BDFDB.disCN.channelheadericonmargin} loggerButton">
+		this.patchModules = {
+			"HeaderBar":["componentDidMount","componentDidUpdate"]
+		};
+		
+		this.loggerButtonMarkup =
+			`<span class="${BDFDB.disCN.channelheadericonmargin} logger-button">
 				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" name="Logs" width="16" height="16" viewBox="-150 -55 680 680">
 					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
 						<path d="M496.093,189.613c-18.643-15.674-47.168-13.807-63.354,5.493l-9.727,11.508l68.945,57.849l9.288-11.466 C517.22,233.997,515.199,205.621,496.093,189.613z" fill="currentColor"/>
@@ -16,7 +30,7 @@ class MessageLogger {
 			</span>`;
 		
 		this.timeLogModalMarkup =
-			`<span class="MessageLogger-modal MessageLogger-Log-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal ${this.getName()}-Log-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -47,7 +61,7 @@ class MessageLogger {
 			</span>`; 
 			
 		this.contentModalMarkup =
-			`<span class="MessageLogger-modal MessageLogger-Content-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal ${this.getName()}-Content-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -103,41 +117,41 @@ class MessageLogger {
 		this.dividerMarkup = `<div class="${BDFDB.disCN.modaldivider}"></div>`;
 		
 		this.css = `
-			.MessageLogger-Log-modal .log-time {
+			.${this.getName()}-Log-modal .log-time {
 				width: 160px;
 			}  
-			.MessageLogger-Log-modal .log-guild { 
+			.${this.getName()}-Log-modal .log-guild { 
 				width: 35px;
 				height: 35px;
 				background-size: cover;
 				background-position: center;
 				border-radius: 50%;
 			}
-			.MessageLogger-Log-modal .log-content {
+			.${this.getName()}-Log-modal .log-content {
 				max-width: 600px;
 				cursor: pointer;
 			}
-			.MessageLogger-Log-modal .log-status {
+			.${this.getName()}-Log-modal .log-status {
 				width: 10px;
 				height: 10px;
 				border-radius: 50%;
 			}
-			.MessageLogger-Log-modal .log-status.notdeleted {
+			.${this.getName()}-Log-modal .log-status.notdeleted {
 				background: #43b581;
 			}
-			.MessageLogger-Log-modal .log-status.deleted {
+			.${this.getName()}-Log-modal .log-status.deleted {
 				background: #f04747;
 			}
-			.MessageLogger-Content-modal .message-content {
+			.${this.getName()}-Content-modal .message-content {
 				word-wrap: break-word;
 				white-space: pre-wrap;
 			}
-			.MessageLogger-settings .guild-list {
+			.${this.getName()}-settings .guild-list {
 				display: flex;
 				align-items: center;
 				flex-wrap: wrap;
 			}
-			.MessageLogger-settings .guild-avatar {
+			.${this.getName()}-settings .guild-avatar {
 				background-color: #7D7672;
 				background-size: cover;
 				background-position: center;
@@ -156,28 +170,18 @@ class MessageLogger {
 				text-align: center;
 				font-weight: 400;
 			}
-			.MessageLogger-settings .guild-avatar.enabled {
+			.${this.getName()}-settings .guild-avatar.enabled {
 				border-color: #43B581;
 			} 
-			.MessageLogger-settings .guild-avatar.disabled {
+			.${this.getName()}-settings .guild-avatar.disabled {
 				border-color: #36393F;
 				filter: grayscale(100%) brightness(50%);
 			}`;
 	}
-
-	getName () {return "MessageLogger";}
-
-	getDescription () {return "Allows you to log messages of servers and DMs while your discord client is running.";}
-
-	getVersion () {return "1.0.3";}
-
-	getAuthor () {return "DevilBro";}
-
-	getRawUrl () {return "https://raw.githubusercontent.com/MessageLoggerBD/MessageLogger/master/MessageLogger.plugin.js";}
 	
 	getSettingsPanel () {
 		var enabled = BDFDB.loadAllData(this, "enabled");
-		var settingshtml = `<div class="MessageLogger-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="guild-list ${BDFDB.disCN.marginbottom8}">`;
 		settingshtml += `<div class="guild-avatar ${enabled["@me"] ? "enabled" : "disabled"}" guild-id="@me">DMs</div>`;
 		let guilds = this.GuildStore.getGuilds();
@@ -188,39 +192,37 @@ class MessageLogger {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Batch set Guilds:</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorprimary + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} disable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Disable</div></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} enable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Enable</div></button></div>`;
 		settingshtml += `</div></div>`;
 			
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		$(settingspanel)
-			.on("mouseenter", ".guild-avatar", (e) => {
-				let id = e.currentTarget.getAttribute("guild-id");
-				BDFDB.createTooltip(id == "@me" ? "Direct Messages" : this.GuildStore.getGuild(id).name, e.currentTarget, {type:"top"});
-			})
-			.on("click", ".guild-avatar", (e) => {
-				let disableoff = !e.currentTarget.classList.contains("disabled");
-				let id = e.currentTarget.getAttribute("guild-id");
-				e.currentTarget.classList.toggle("enabled", !disableoff);
-				e.currentTarget.classList.toggle("disabled", disableoff);
-				BDFDB.saveData(id, !disableoff, this, "enabled");
-			})
-			.on("click", ".disable-all", (e) => {
-				let data = BDFDB.loadAllData(this, "enabled");
-				settingspanel.querySelectorAll(".guild-avatar").forEach(icon => {
-					data[icon.getAttribute("guild-id")] = false;
-					icon.classList.remove("enabled");
-					icon.classList.add("disabled");
-				});
-				BDFDB.saveAllData(data, this, "enabled");
-			})
-			.on("click", ".enable-all", (e) => {
-				let data = BDFDB.loadAllData(this, "enabled");
-				settingspanel.querySelectorAll(".guild-avatar").forEach(icon => {
-					data[icon.getAttribute("guild-id")] = true;
-					icon.classList.add("enabled");
-					icon.classList.remove("disabled");
-				});
-				BDFDB.saveAllData(data, this, "enabled");
+		BDFDB.addEventListener(this, settingspanel, "mouseenter", ".guild-avatar", e => {
+			let id = e.currentTarget.getAttribute("guild-id");
+			BDFDB.createTooltip(id == "@me" ? "Direct Messages" : this.GuildStore.getGuild(id).name, e.currentTarget, {type:"top"});
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".guild-avatar", e => {
+			let disableoff = !BDFDB.containsClass(e.currentTarget, "disabled");
+			let id = e.currentTarget.getAttribute("guild-id");
+			BDFDB.toggleClass(e.currentTarget, "enabled", !disableoff);
+			BDFDB.toggleClass(e.currentTarget, "disabled", disableoff);
+			BDFDB.saveData(id, !disableoff, this, "enabled");
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".disable-all", e => {
+			let data = BDFDB.loadAllData(this, "enabled");
+			settingspanel.querySelectorAll(".guild-avatar").forEach(icon => {
+				data[icon.getAttribute("guild-id")] = false;
+				BDFDB.removeClass(icon, "enabled");
+				BDFDB.addClass(icon, "disabled");
 			});
-			
+			BDFDB.saveAllData(data, this, "enabled");
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".enable-all", e => {
+			let data = BDFDB.loadAllData(this, "enabled");
+			settingspanel.querySelectorAll(".guild-avatar").forEach(icon => {
+				data[icon.getAttribute("guild-id")] = true;
+				BDFDB.addClass(icon, "enabled");
+				BDFDB.removeClass(icon, "disabled");
+			});
+			BDFDB.saveAllData(data, this, "enabled");
+		});
 		return settingspanel;
 	}
 
@@ -229,22 +231,25 @@ class MessageLogger {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.UserStore = BDFDB.WebModules.findByProperties("getUsers");
@@ -265,7 +270,7 @@ class MessageLogger {
 			this.loggerqueues = {};
 			
 			var logged = [];
-			BDFDB.WebModules.patch(this.MessageUtils, "receiveMessage", this, {after: (e) => {
+			BDFDB.WebModules.patch(this.MessageUtils, "receiveMessage", this, {after: e => {
 				let message = Object.assign({},e.methodArguments[1]);
 				message.guild_id = message.guild_id ? message.guild_id : "@me";
 				if ((message.nonce || message.attachments.length > 0) && !logged.includes(message.id) && BDFDB.loadData(message.guild_id, this, "enabled")) {
@@ -274,35 +279,34 @@ class MessageLogger {
 				}
 			}});
 			
-			setTimeout(() => {this.onSwitch ();},1000);
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
-			$(".loggerButton").remove();
-			
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			BDFDB.removeEles(".logger-button");
 			BDFDB.unloadMessage(this);
 		}
 	}
 	
-	onSwitch () {
-		if (typeof BDFDB === "object") {
-			setTimeout(() => {
-				$(".loggerButton").remove();
-				$(this.loggerButton)
-					.insertBefore(BDFDB.dotCNS.channelheadertitle + BDFDB.dotCN.channelheadersearch)
-					.on("click." + this.getName(), (e) => {
-						this.showLogs();
-					})
-					.on("mouseenter." + this.getName(), (e) => {
-						BDFDB.createTooltip("Logger", e.currentTarget, {type:"bottom",selector:"messagelogger-button-tooltip"});
-					});
-			},1);
-		}
-	}
 	
 	// begin of own functions
+	
+	processHeaderBar (instance, wrapper) {
+		BDFDB.removeEles(".logger-button");
+		let search = wrapper.querySelector(BDFDB.dotCN.channelheadersearch);
+		if (!search) return;
+		let loggerbutton = BDFDB.htmlToElement(this.loggerButtonMarkup);
+		search.parentElement.insertBefore(loggerbutton, search);
+		let icon = loggerbutton.querySelector(BDFDB.dotCN.channelheadericon);
+		icon.addEventListener("click", () => {
+			this.showLogs();
+		});
+		icon.addEventListener("mouseenter", () => {
+			BDFDB.createTooltip("Logger", icon, {type:"bottom",selector:"messagelogger-button-tooltip"});
+		});
+	}
 	
 	addLog (message) {
 		let filepath = this.path.join(this.logsfolder, message.guild_id, message.channel_id + ".txt");
@@ -383,7 +387,10 @@ class MessageLogger {
 		let filepath = this.path.join(this.logsfolder, server, channel + ".txt");
 		if (this.fs.existsSync(filepath)) logs = this.fs.readFileSync(filepath).toString().split("\n");
 		
-		let timeLogModal = $(this.timeLogModalMarkup);
+		let timeLogModal = BDFDB.htmlToElement(this.timeLogModalMarkup);
+		
+		let container = timeLogModal.querySelector(".entries");
+		if (!container) return;
 		for (let log of logs.reverse().slice(0,100)) {
 			let ids = / \(author:([0-9]*?) message:([0-9]*?)\)/.exec(log);
 			let authorid = ids[1];
@@ -392,63 +399,64 @@ class MessageLogger {
 			let user = this.UserStore.getUser(authorid);
 			let message = this.MessageStore.getMessage(channel, messageid);
 			if (user) {
-				let entry = $(this.logEntryMarkup);
+				if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+				let entry = BDFDB.htmlToElement(this.logEntryMarkup);
 				let member = this.MemberStore.getMember(authorid);
 				let messagestring = message ? message.content : log.replace(ids[0], "").replace(files[0], "").split(": ")[1];
 				let filestring = "";
-				for (let file of files[1].split(" ")) {
-					if (file) {
-						filestring += `<a title="${file}" class="${BDFDB.disCN.anchor}" href="${file.split("?width=")[0]}" rel="noreferrer noopener" target="_blank" role="button">${file.split("?width=")[0]}</a> `;
-					}
-				}
-				entry.find(".log-status").addClass(message ? "notdeleted" : "deleted").on("mouseenter", (e) => {
-					BDFDB.createTooltip(message ? "Not Deleted" : "Deleted", e.currentTarget, {type:"top"});
-				});
-				entry.find(".log-time").text(message ? message.timestamp._i.toLocaleString() : log.split(" @ ")[0]);
-				entry.find(".log-guild").css("background-image", `url(${BDFDB.getUserAvatar(user.id)})`);
-				entry.find(".log-content")
-					.text((member && member.nickname ? member.nickname : user.username) + ": " + (messagestring + (files[1] ? (" Images: " + files[1]) : "")).trim())
-					.on("click." + this.getName(), () => {
-						let contentModal = $(this.contentModalMarkup);
-						contentModal
-							.find(".message-content").html((BDFDB.encodeToHTML(messagestring) + " " + (filestring ? ((messagestring ? "\n" : "") + "Sent Images: " + filestring) : "")).trim())
-							.on("click." + this.getName(), BDFDB.dotCN.anchor, (e) => {
-								e.preventDefault();
-								let imageModal = $(this.imageModalMarkup);
-								let filename = e.currentTarget.href.split("/");
-								filename = filename[filename.length-2] + "_" + filename[filename.length-1];
-								let filepath = this.path.join(this.logsfolder, server, channel + "_images", filename);
-								this.fs.readFile(filepath, (error, result) => {
-									if (error) {
-										console.error("The image could not be loaded (no longer archived): " + error);
-										alert("The image " + filepath + " no longer exists.");
-									}
-									else {
-										let width = e.currentTarget.title.split("?width=");
-										let height = width[1].split("&height=")[1];
-										width = width[1].split("&height=")[0];
-										let resizeX = (document.firstElementChild.clientWidth/width) * 0.71;
-										let resizeY = (document.firstElementChild.clientHeight/height) * 0.57;
-										width = width * (resizeX < resizeY ? resizeX : resizeY);
-										height = height * (resizeX < resizeY ? resizeX : resizeY);
-										imageModal
-											.find(BDFDB.dotCN.imagewrapper)
-												.css("width", width + "px")
-												.css("height", height + "px")
-												.css("pointer-events", "none")
-												.find("img")
-													.css("width", width + "px")
-													.css("height", height + "px")
-													.attr("src", "data:image/jpg;base64," + result.toString("base64"));
-										BDFDB.appendModal(imageModal);
-									}
-								});
-							});
-						BDFDB.appendModal(contentModal);
+				for (let file of files[1].split(" ")) if (file) filestring += `<a title="${file}" class="${BDFDB.disCN.anchor}" href="${file.split("?width=")[0]}" rel="noreferrer noopener" target="_blank" role="button">${file.split("?width=")[0]}</a> `;
+				
+				let status = entry.querySelector(".log-status");
+				BDFDB.addClass(status, message ? "notdeleted" : "deleted");
+				status.addEventListener("mouseenter", () => {BDFDB.createTooltip(message ? "Not Deleted" : "Deleted", status, {type:"top"});});
+				entry.querySelector(".log-time").innerText = message ? message.timestamp._i.toLocaleString() : log.split(" @ ")[0];
+				entry.querySelector(".log-guild").style.setProperty("background-image", `url(${BDFDB.getUserAvatar(user.id)})`);
+				
+				let content = entry.querySelector(".log-content");
+				content.innerText = (member && member.nickname ? member.nickname : user.username) + ": " + (messagestring + (files[1] ? (" Images: " + files[1]) : "")).trim();
+				content.addEventListener("click", () => {
+					let contentModal = BDFDB.htmlToElement(this.contentModalMarkup);
+					let messagecontent = contentModal.querySelector(".message-content");
+					messagecontent.innerHTML = (BDFDB.encodeToHTML(messagestring) + " " + (filestring ? ((messagestring ? "\n" : "") + "Sent Images: " + filestring) : "")).trim();
+					BDFDB.addChildEventListener(messagecontent, "click", BDFDB.dotCN.anchor, e => {
+						e.preventDefault();
+						let imageModal = BDFDB.htmlToElement(this.imageModalMarkup);
+						let filename = e.currentTarget.href.split("/");
+						filename = filename[filename.length-2] + "_" + filename[filename.length-1];
+						let filepath = this.path.join(this.logsfolder, server, channel + "_images", filename);
+						this.fs.readFile(filepath, (error, result) => {
+							if (error) {
+								console.error("The image could not be loaded (no longer archived): " + error);
+								alert("The image " + filepath + " no longer exists.");
+							}
+							else {
+								let width = e.currentTarget.title.split("?width=");
+								let height = width[1].split("&height=")[1];
+								width = width[1].split("&height=")[0];
+								let resizeX = (document.firstElementChild.clientWidth/width) * 0.71;
+								let resizeY = (document.firstElementChild.clientHeight/height) * 0.57;
+								width = width * (resizeX < resizeY ? resizeX : resizeY);
+								height = height * (resizeX < resizeY ? resizeX : resizeY);
+								var imagewrapper = imageModal.querySelector(BDFDB.dotCN.imagewrapper);
+								var img = imagewrapper.querySelector("img");
+								imagewrapper.style.setProperty("width", width + "px");
+								imagewrapper.style.setProperty("height", height + "px");
+								imagewrapper.style.setProperty("pointer-events", "none", "important");
+								img.style.setProperty("width", width + "px");
+								img.style.setProperty("height", height + "px");
+								img.setAttribute("width", width + "px");
+								img.setAttribute("height", height + "px");
+								img.setAttribute("src", "data:image/jpg;base64," + result.toString("base64"));
+								BDFDB.appendModal(imageModal);
+							}
+						});
 					});
-				timeLogModal.find(".entries").append(entry).append(this.dividerMarkup);
+					BDFDB.appendModal(contentModal);
+				});
+				container.appendChild(entry);
 			}
 		}
+		
 		BDFDB.appendModal(timeLogModal);
 	}
 }
