@@ -30,7 +30,7 @@ class MessageLogger {
 			</span>`;
 		
 		this.timeLogModalMarkup =
-			`<span class="${this.getName()}-modal ${this.getName()}-Log-modal DevilBro-modal">
+			`<span class="${this.name}-modal ${this.name}-Log-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -65,7 +65,7 @@ class MessageLogger {
 			</span>`; 
 			
 		this.contentModalMarkup =
-			`<span class="${this.getName()}-modal ${this.getName()}-Content-modal DevilBro-modal">
+			`<span class="${this.name}-modal ${this.name}-Content-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -94,7 +94,7 @@ class MessageLogger {
 			</span>`;
 			
 		this.imageModalMarkup =
-			`<span class="${this.getName()}-modal DevilBro-modal">
+			`<span class="${this.name}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -118,41 +118,41 @@ class MessageLogger {
 		this.dividerMarkup = `<div class="${BDFDB.disCN.modaldivider}"></div>`;
 		
 		this.css = `
-			.${this.getName()}-Log-modal .log-time {
+			.${this.name}-Log-modal .log-time {
 				width: 160px;
 			}  
-			.${this.getName()}-Log-modal .log-guild { 
+			.${this.name}-Log-modal .log-guild { 
 				width: 35px;
 				height: 35px;
 				background-size: cover;
 				background-position: center;
 				border-radius: 50%;
 			}
-			.${this.getName()}-Log-modal .log-content {
+			.${this.name}-Log-modal .log-content {
 				max-width: 600px;
 				cursor: pointer;
 			}
-			.${this.getName()}-Log-modal .log-status {
+			.${this.name}-Log-modal .log-status {
 				width: 10px;
 				height: 10px;
 				border-radius: 50%;
 			}
-			.${this.getName()}-Log-modal .log-status.notdeleted {
+			.${this.name}-Log-modal .log-status.notdeleted {
 				background: #43b581;
 			}
-			.${this.getName()}-Log-modal .log-status.deleted {
+			.${this.name}-Log-modal .log-status.deleted {
 				background: #f04747;
 			}
-			.${this.getName()}-Content-modal .message-content {
+			.${this.name}-Content-modal .message-content {
 				word-wrap: break-word;
 				white-space: pre-wrap;
 			}
-			.${this.getName()}-settings .guild-list {
+			.${this.name}-settings .guild-list {
 				display: flex;
 				align-items: center;
 				flex-wrap: wrap;
 			}
-			.${this.getName()}-settings .guild-avatar {
+			.${this.name}-settings .guild-avatar {
 				background-color: #7D7672;
 				background-size: cover;
 				background-position: center;
@@ -171,10 +171,10 @@ class MessageLogger {
 				text-align: center;
 				font-weight: 400;
 			}
-			.${this.getName()}-settings .guild-avatar.enabled {
+			.${this.name}-settings .guild-avatar.enabled {
 				border-color: #43B581;
 			} 
-			.${this.getName()}-settings .guild-avatar.disabled {
+			.${this.name}-settings .guild-avatar.disabled {
 				border-color: #36393F;
 				filter: grayscale(100%) brightness(50%);
 			}`;
@@ -182,7 +182,7 @@ class MessageLogger {
 	
 	getSettingsPanel () {
 		var enabled = BDFDB.loadAllData(this, "enabled");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="guild-list ${BDFDB.disCN.marginbottom8}">`;
 		settingshtml += `<div class="guild-avatar ${enabled["@me"] ? "enabled" : "disabled"}" guild-id="@me">DMs</div>`;
 		let guilds = this.GuildStore.getGuilds();
