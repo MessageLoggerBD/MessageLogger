@@ -1,4 +1,4 @@
-//META{"name":"MessageLogger"}*//
+//META{"name":"MessageLogger","website":"https://github.com/MessageLoggerBD/MessageLogger","source":"https://raw.githubusercontent.com/MessageLoggerBD/MessageLogger/master/MessageLogger.plugin.js"}*//
 
 class MessageLogger {
 	getName () {return "MessageLogger";}
