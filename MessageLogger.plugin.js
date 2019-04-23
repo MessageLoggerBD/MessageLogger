@@ -3,7 +3,7 @@
 class MessageLogger {
 	getName () {return "MessageLogger";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,25 +12,38 @@ class MessageLogger {
 	getRawUrl () {return "https://raw.githubusercontent.com/MessageLoggerBD/MessageLogger/master/MessageLogger.plugin.js";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+		};
+		
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"]
 		};
 
 		this.loggerButtonMarkup =
-			`<span class="${BDFDB.disCN.channelheadericonmargin} logger-button">
+			BDFDB.DiscordClassModules.HeaderBar.iconMargin ? `<span class="${BDFDB.disCN.channelheadericonmargin} logger-button">
 				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" name="Logs" width="16" height="16" viewBox="-150 -55 680 680">
-					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-						<path d="M496.093,189.613c-18.643-15.674-47.168-13.807-63.354,5.493l-9.727,11.508l68.945,57.849l9.288-11.466 C517.22,233.997,515.199,205.621,496.093,189.613z" fill="currentColor"/>
-						<path d="M301.375,350.534l-5.131,6.072c-4.453,5.332-7.661,11.704-9.272,18.457l-13.945,58.359 c-1.318,5.522,0.601,11.323,4.951,14.971c4.234,3.558,10.206,4.591,15.601,2.285l55.063-23.877 c6.372-2.769,12.085-7.031,16.538-12.319l5.149-6.092L301.375,350.534z" fill="currentColor"/>
-						<polygon points="403.656,229.517 320.733,327.631 389.683,385.487 472.601,287.366" fill="currentColor"/>
-						<path d="M376.02,66.504l-56.982-54.141c-5.387-5.107-12.014-8.115-18.999-10.069V90h89.052 C387.23,81.09,382.69,72.836,376.02,66.504z" fill="currentColor"/>
-						<path d="M257.792,368.091c2.681-11.221,8.027-21.841,15.439-30.718l116.807-138.214V120h-105c-8.291,0-15-6.709-15-15V0h-225 c-24.814,0-45,20.186-45,45v422c0,24.814,20.186,45,45,45h300c24.814,0,45-20.186,45-45v-35.459l-1.948,2.305 c-7.368,8.775-16.875,15.85-27.466,20.465l-55.107,23.892c-15.532,6.707-33.511,4.331-46.816-6.812 c-13.14-11.03-18.838-28.242-14.854-44.941L257.792,368.091z M75.038,90h150c8.291,0,15,6.709,15,15s-6.709,15-15,15h-150 c-8.291,0-15-6.709-15-15S66.747,90,75.038,90z M75.038,181h240c8.291,0,15,6.709,15,15s-6.709,15-15,15h-240 c-8.291,0-15-6.709-15-15S66.747,181,75.038,181z M195.038,391h-120c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15h120 c8.291,0,15,6.709,15,15C210.038,384.291,203.329,391,195.038,391z M75.038,301c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15 h180c8.291,0,15,6.709,15,15c0,8.291-6.709,15-15,15H75.038z" fill="currentColor"/>
+					<g fill="currentColor" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path d="M496.093,189.613c-18.643-15.674-47.168-13.807-63.354,5.493l-9.727,11.508l68.945,57.849l9.288-11.466 C517.22,233.997,515.199,205.621,496.093,189.613z"/>
+						<path d="M301.375,350.534l-5.131,6.072c-4.453,5.332-7.661,11.704-9.272,18.457l-13.945,58.359 c-1.318,5.522,0.601,11.323,4.951,14.971c4.234,3.558,10.206,4.591,15.601,2.285l55.063-23.877 c6.372-2.769,12.085-7.031,16.538-12.319l5.149-6.092L301.375,350.534z"/>
+						<polygon points="403.656,229.517 320.733,327.631 389.683,385.487 472.601,287.366"/>
+						<path d="M376.02,66.504l-56.982-54.141c-5.387-5.107-12.014-8.115-18.999-10.069V90h89.052 C387.23,81.09,382.69,72.836,376.02,66.504z"/>
+						<path d="M257.792,368.091c2.681-11.221,8.027-21.841,15.439-30.718l116.807-138.214V120h-105c-8.291,0-15-6.709-15-15V0h-225 c-24.814,0-45,20.186-45,45v422c0,24.814,20.186,45,45,45h300c24.814,0,45-20.186,45-45v-35.459l-1.948,2.305 c-7.368,8.775-16.875,15.85-27.466,20.465l-55.107,23.892c-15.532,6.707-33.511,4.331-46.816-6.812 c-13.14-11.03-18.838-28.242-14.854-44.941L257.792,368.091z M75.038,90h150c8.291,0,15,6.709,15,15s-6.709,15-15,15h-150 c-8.291,0-15-6.709-15-15S66.747,90,75.038,90z M75.038,181h240c8.291,0,15,6.709,15,15s-6.709,15-15,15h-240 c-8.291,0-15-6.709-15-15S66.747,181,75.038,181z M195.038,391h-120c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15h120 c8.291,0,15,6.709,15,15C210.038,384.291,203.329,391,195.038,391z M75.038,301c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15 h180c8.291,0,15,6.709,15,15c0,8.291-6.709,15-15,15H75.038z"/>
 					</g>
 				</svg>
-			</span>`;
+			</span>`
+			: `<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} logger-button">
+				<svg class="${BDFDB.disCN.channelheadericon}" name="Logs" width="16" height="16" viewBox="-150 -55 680 680">
+					<path fill="currentColor" d="M496.093,189.613c-18.643-15.674-47.168-13.807-63.354,5.493l-9.727,11.508l68.945,57.849l9.288-11.466 C517.22,233.997,515.199,205.621,496.093,189.613z"/>
+					<path fill="currentColor" d="M301.375,350.534l-5.131,6.072c-4.453,5.332-7.661,11.704-9.272,18.457l-13.945,58.359 c-1.318,5.522,0.601,11.323,4.951,14.971c4.234,3.558,10.206,4.591,15.601,2.285l55.063-23.877 c6.372-2.769,12.085-7.031,16.538-12.319l5.149-6.092L301.375,350.534z"/>
+					<polygon fill="currentColor" points="403.656,229.517 320.733,327.631 389.683,385.487 472.601,287.366"/>
+					<path fill="currentColor" d="M376.02,66.504l-56.982-54.141c-5.387-5.107-12.014-8.115-18.999-10.069V90h89.052 C387.23,81.09,382.69,72.836,376.02,66.504z"/>
+					<path fill="currentColor" d="M257.792,368.091c2.681-11.221,8.027-21.841,15.439-30.718l116.807-138.214V120h-105c-8.291,0-15-6.709-15-15V0h-225 c-24.814,0-45,20.186-45,45v422c0,24.814,20.186,45,45,45h300c24.814,0,45-20.186,45-45v-35.459l-1.948,2.305 c-7.368,8.775-16.875,15.85-27.466,20.465l-55.107,23.892c-15.532,6.707-33.511,4.331-46.816-6.812 c-13.14-11.03-18.838-28.242-14.854-44.941L257.792,368.091z M75.038,90h150c8.291,0,15,6.709,15,15s-6.709,15-15,15h-150 c-8.291,0-15-6.709-15-15S66.747,90,75.038,90z M75.038,181h240c8.291,0,15,6.709,15,15s-6.709,15-15,15h-240 c-8.291,0-15-6.709-15-15S66.747,181,75.038,181z M195.038,391h-120c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15h120 c8.291,0,15,6.709,15,15C210.038,384.291,203.329,391,195.038,391z M75.038,301c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15 h180c8.291,0,15,6.709,15,15c0,8.291-6.709,15-15,15H75.038z"/>
+				</svg>
+			</div>`;
 
 		this.timeLogModalMarkup =
-			`<span class="${this.name}-modal ${this.name}-Log-modal DevilBro-modal">
+			`<span class="${this.name}-modal ${this.name}-Log-modal BDFDB-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -65,7 +78,7 @@ class MessageLogger {
 			</span>`; 
 
 		this.contentModalMarkup =
-			`<span class="${this.name}-modal ${this.name}-Content-modal DevilBro-modal">
+			`<span class="${this.name}-modal ${this.name}-Content-modal BDFDB-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -94,7 +107,7 @@ class MessageLogger {
 			</span>`;
 
 		this.imageModalMarkup =
-			`<span class="${this.name}-modal DevilBro-modal">
+			`<span class="${this.name}-modal BDFDB-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -182,7 +195,7 @@ class MessageLogger {
 
 	getSettingsPanel () {
 		var enabled = BDFDB.loadAllData(this, "enabled");
-		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
+		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		settingshtml += `<div class="guild-list ${BDFDB.disCN.marginbottom8}">`;
 		settingshtml += `<div class="guild-avatar ${enabled["@me"] ? "enabled" : "disabled"}" guild-id="@me">DMs</div>`;
 		let guilds = this.GuildStore.getGuilds();
@@ -260,7 +273,6 @@ class MessageLogger {
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.ChannelStore = BDFDB.WebModules.findByProperties("getChannels");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-			this.IconUtils = BDFDB.WebModules.findByProperties("getUserAvatarURL");
 			this.MessageUtils = BDFDB.WebModules.findByProperties("receiveMessage");
 
 			this.fs = require("fs");
@@ -394,66 +406,68 @@ class MessageLogger {
 		if (!container) return;
 		for (let log of logs.reverse().slice(0,100)) {
 			let ids = / \(author:([0-9]*?) message:([0-9]*?)\)/.exec(log);
-			let authorid = ids[1];
-			let messageid = ids[2];
-			let files = / \(filesML:(.*?)\)/.exec(log) || ["",""];
-			let user = this.UserStore.getUser(authorid);
-			let message = this.MessageStore.getMessage(channel, messageid);
-			if (user) {
-				if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
-				let entry = BDFDB.htmlToElement(this.logEntryMarkup);
-				let member = this.MemberStore.getMember(authorid);
-				let messagestring = message ? message.content : log.replace(ids[0], "").replace(files[0], "").split(": ")[1];
-				let filestring = "";
-				for (let file of files[1].split(" ")) if (file) filestring += `<a title="${file}" class="${BDFDB.disCN.anchor}" href="${file.split("?width=")[0]}" rel="noreferrer noopener" target="_blank" role="button">${file.split("?width=")[0]}</a> `;
+			if (ids) {
+				let authorid = ids[1];
+				let messageid = ids[2];
+				let files = / \(filesML:(.*?)\)/.exec(log) || ["",""];
+				let user = this.UserStore.getUser(authorid);
+				let message = this.MessageStore.getMessage(channel, messageid);
+				if (user) {
+					if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+					let entry = BDFDB.htmlToElement(this.logEntryMarkup);
+					let member = this.MemberStore.getMember(authorid);
+					let messagestring = message ? message.content : log.replace(ids[0], "").replace(files[0], "").split(": ")[1];
+					let filestring = "";
+					for (let file of files[1].split(" ")) if (file) filestring += `<a title="${file}" class="${BDFDB.disCN.anchor}" href="${file.split("?width=")[0]}" rel="noreferrer noopener" target="_blank" role="button">${file.split("?width=")[0]}</a> `;
 
-				let status = entry.querySelector(".log-status");
-				BDFDB.addClass(status, message ? "notdeleted" : "deleted");
-				status.addEventListener("mouseenter", () => {BDFDB.createTooltip(message ? "Not Deleted" : "Deleted", status, {type:"top"});});
-				entry.querySelector(".log-time").innerText = message ? message.timestamp._i.toLocaleString() : log.split(" @ ")[0];
-				entry.querySelector(".log-guild").style.setProperty("background-image", `url(${BDFDB.getUserAvatar(user.id)})`);
+					let status = entry.querySelector(".log-status");
+					BDFDB.addClass(status, message ? "notdeleted" : "deleted");
+					status.addEventListener("mouseenter", () => {BDFDB.createTooltip(message ? "Not Deleted" : "Deleted", status, {type:"top"});});
+					entry.querySelector(".log-time").innerText = message ? message.timestamp._i.toLocaleString() : log.split(" @ ")[0];
+					entry.querySelector(".log-guild").style.setProperty("background-image", `url(${BDFDB.getUserAvatar(user.id)})`);
 
-				let content = entry.querySelector(".log-content");
-				content.innerText = (member && member.nickname ? member.nickname : user.username) + ": " + (messagestring + (files[1] ? (" Images: " + files[1]) : "")).trim();
-				content.addEventListener("click", () => {
-					let contentModal = BDFDB.htmlToElement(this.contentModalMarkup);
-					let messagecontent = contentModal.querySelector(".message-content");
-					messagecontent.innerHTML = (BDFDB.encodeToHTML(messagestring) + " " + (filestring ? ((messagestring ? "\n" : "") + "Sent Images: " + filestring) : "")).trim();
-					BDFDB.addChildEventListener(messagecontent, "click", BDFDB.dotCN.anchor, e => {
-						let imageModal = BDFDB.htmlToElement(this.imageModalMarkup);
-						let filename = e.currentTarget.href.split("/");
-						filename = filename[filename.length-2] + "_" + filename[filename.length-1];
-						let filepath = this.path.join(this.logsfolder, server, channel + "_images", filename);
-						this.fs.readFile(filepath, (error, result) => {
-							if (error) {
-								console.error("The image could not be loaded (no longer archived): " + error);
-								alert("The image " + filepath + " no longer exists.");
-							}
-							else {
-								let width = e.currentTarget.title.split("?width=");
-								let height = width[1].split("&height=")[1];
-								width = width[1].split("&height=")[0];
-								let resizeX = (document.firstElementChild.clientWidth/width) * 0.71;
-								let resizeY = (document.firstElementChild.clientHeight/height) * 0.57;
-								width = width * (resizeX < resizeY ? resizeX : resizeY);
-								height = height * (resizeX < resizeY ? resizeX : resizeY);
-								var imagewrapper = imageModal.querySelector(BDFDB.dotCN.imagewrapper);
-								var img = imagewrapper.querySelector("img");
-								imagewrapper.style.setProperty("width", width + "px");
-								imagewrapper.style.setProperty("height", height + "px");
-								imagewrapper.style.setProperty("pointer-events", "none", "important");
-								img.style.setProperty("width", width + "px");
-								img.style.setProperty("height", height + "px");
-								img.setAttribute("width", width + "px");
-								img.setAttribute("height", height + "px");
-								img.setAttribute("src", "data:image/jpg;base64," + result.toString("base64"));
-								BDFDB.appendModal(imageModal);
-							}
+					let content = entry.querySelector(".log-content");
+					content.innerText = (member && member.nickname ? member.nickname : user.username) + ": " + (messagestring.replace(/\n/g, " ") + (files[1] ? (" Images: " + files[1]) : "")).trim();
+					content.addEventListener("click", () => {
+						let contentModal = BDFDB.htmlToElement(this.contentModalMarkup);
+						let messagecontent = contentModal.querySelector(".message-content");
+						messagecontent.innerHTML = (BDFDB.encodeToHTML(messagestring) + " " + (filestring ? ((messagestring ? "\n" : "") + "Sent Images: " + filestring) : "")).trim();
+						BDFDB.addChildEventListener(messagecontent, "click", BDFDB.dotCN.anchor, e => {
+							let imageModal = BDFDB.htmlToElement(this.imageModalMarkup);
+							let filename = e.currentTarget.href.split("/");
+							filename = filename[filename.length-2] + "_" + filename[filename.length-1];
+							let filepath = this.path.join(this.logsfolder, server, channel + "_images", filename);
+							this.fs.readFile(filepath, (error, result) => {
+								if (error) {
+									console.error("The image could not be loaded (no longer archived): " + error);
+									alert("The image " + filepath + " no longer exists.");
+								}
+								else {
+									let width = e.currentTarget.title.split("?width=");
+									let height = width[1].split("&height=")[1];
+									width = width[1].split("&height=")[0];
+									let resizeX = (document.firstElementChild.clientWidth/width) * 0.71;
+									let resizeY = (document.firstElementChild.clientHeight/height) * 0.57;
+									width = width * (resizeX < resizeY ? resizeX : resizeY);
+									height = height * (resizeX < resizeY ? resizeX : resizeY);
+									var imagewrapper = imageModal.querySelector(BDFDB.dotCN.imagewrapper);
+									var img = imagewrapper.querySelector("img");
+									imagewrapper.style.setProperty("width", width + "px");
+									imagewrapper.style.setProperty("height", height + "px");
+									imagewrapper.style.setProperty("pointer-events", "none", "important");
+									img.style.setProperty("width", width + "px");
+									img.style.setProperty("height", height + "px");
+									img.setAttribute("width", width + "px");
+									img.setAttribute("height", height + "px");
+									img.setAttribute("src", "data:image/jpg;base64," + result.toString("base64"));
+									BDFDB.appendModal(imageModal);
+								}
+							});
 						});
+						BDFDB.appendModal(contentModal);
 					});
-					BDFDB.appendModal(contentModal);
-				});
-				container.appendChild(entry);
+					container.appendChild(entry);
+				}
 			}
 		}
 
