@@ -17,7 +17,8 @@ class MessageLogger {
 		};
 		
 		this.patchModules = {
-			"HeaderBar":["componentDidMount","componentDidUpdate"]
+			"HeaderBar":["componentDidMount","componentDidUpdate"],
+			"HeaderBarContainer":["componentDidMount","componentDidUpdate"]
 		};
 
 		this.loggerButtonMarkup =
@@ -305,6 +306,10 @@ class MessageLogger {
 
 
 	// begin of own functions
+	
+	processHeaderBarContainer (instance, wrapper) {
+		this.processHeaderBar(instance, wrapper);
+	}
 
 	processHeaderBar (instance, wrapper) {
 		BDFDB.removeEles(".logger-button");
