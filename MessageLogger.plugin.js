@@ -34,7 +34,7 @@ class MessageLogger {
 				</svg>
 			</span>`
 			: `<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} logger-button">
-				<svg class="${BDFDB.disCN.channelheadericon}" name="Logs" width="16" height="16" viewBox="-150 -55 680 680">
+				<svg class="${BDFDB.disCN.channelheadericon}" name="Logs" width="24" height="24" viewBox="-60 -40 620 620">
 					<path fill="currentColor" d="M496.093,189.613c-18.643-15.674-47.168-13.807-63.354,5.493l-9.727,11.508l68.945,57.849l9.288-11.466 C517.22,233.997,515.199,205.621,496.093,189.613z"/>
 					<path fill="currentColor" d="M301.375,350.534l-5.131,6.072c-4.453,5.332-7.661,11.704-9.272,18.457l-13.945,58.359 c-1.318,5.522,0.601,11.323,4.951,14.971c4.234,3.558,10.206,4.591,15.601,2.285l55.063-23.877 c6.372-2.769,12.085-7.031,16.538-12.319l5.149-6.092L301.375,350.534z"/>
 					<polygon fill="currentColor" points="403.656,229.517 320.733,327.631 389.683,385.487 472.601,287.366"/>
