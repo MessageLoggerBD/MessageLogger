@@ -3,7 +3,7 @@
 class MessageLogger {
 	getName () {return "MessageLogger";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -13,7 +13,7 @@ class MessageLogger {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["Switching","Fixed the issue where you had to click the button twice after switching servers"]]
 		};
 		
 		this.patchModules = {
@@ -263,13 +263,6 @@ class MessageLogger {
 			}, 15000);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
-			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();});
-			document.head.appendChild(libraryScript);
-		}
-		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
 	}
 
@@ -323,7 +316,7 @@ class MessageLogger {
 	}
 
 	processHeaderBar (instance, wrapper) {
-		BDFDB.removeEles(".logger-button");
+		if (wrapper.querySelector(".logger-button")) return;
 		let search = wrapper.querySelector(BDFDB.dotCN.channelheadersearch);
 		if (!search) return;
 		let loggerbutton = BDFDB.htmlToElement(this.loggerButtonMarkup);
