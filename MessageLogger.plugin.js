@@ -11,7 +11,7 @@ class MessageLogger {
 
 	getRawUrl () {return "https://raw.githubusercontent.com/MessageLoggerBD/MessageLogger/master/MessageLogger.plugin.js";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Switching","Fixed the issue where you had to click the button twice after switching servers"]]
 		};
@@ -20,7 +20,9 @@ class MessageLogger {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"HeaderBarContainer":["componentDidMount","componentDidUpdate"]
 		};
+	}
 
+	initConstructor () {
 		this.loggerButtonMarkup =
 			`<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} logger-button">
 				<svg class="${BDFDB.disCN.channelheadericon}" name="Logs" width="24" height="24" viewBox="-60 -40 620 620">
