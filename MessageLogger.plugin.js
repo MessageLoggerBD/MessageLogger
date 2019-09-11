@@ -3,7 +3,7 @@
 class MessageLogger {
 	getName () {return "MessageLogger";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -13,9 +13,9 @@ class MessageLogger {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Switching","Fixed the issue where you had to click the button twice after switching servers"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
-		
+
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"HeaderBarContainer":["componentDidMount","componentDidUpdate"]
@@ -42,7 +42,7 @@ class MessageLogger {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizelarge}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">Logger</h4> 
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">Logger</h4> 
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
 									<div class="${BDFDB.disCN.buttoncontents}">
@@ -67,7 +67,7 @@ class MessageLogger {
 						</div>
 					</div>
 				</div>
-			</span>`; 
+			</span>`;
 
 		this.contentModalMarkup =
 			`<span class="${this.name}-modal ${this.name}-Content-modal BDFDB-modal">
@@ -76,7 +76,7 @@ class MessageLogger {
 					<div class="${BDFDB.disCN.modalinner}">
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCNS.modalmini + BDFDB.disCN.modalminisize}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
-								<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">Message Content</h4>
+								<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">Message Content</h4>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
 									<div class="${BDFDB.disCN.buttoncontents}">
 										<svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;">
@@ -90,7 +90,7 @@ class MessageLogger {
 							</div>
 							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
 								<div class="${BDFDB.disCNS.scroller + BDFDB.disCNS.modalsubinner + BDFDB.disCN.modalminicontent}">
-									<div class="${BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.selectable} message-content" style="padding-bottom: 20px;">Everything related to plugins and their bugs.</div>
+									<div class="${BDFDB.disCNS.modalminitext + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCN.selectable} message-content"></div>
 								</div> 
 							</div>
 						</div>
@@ -190,7 +190,7 @@ class MessageLogger {
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		settingshtml += `<div class="guild-list ${BDFDB.disCN.marginbottom8}">`;
 		settingshtml += `<div class="guild-avatar ${enabled["@me"] ? "enabled" : "disabled"}" guild-id="@me">DMs</div>`;
-		let guilds = this.GuildStore.getGuilds();
+		let guilds = BDFDB.LibraryModules.GuildStore.getGuilds();
 		for (let id in guilds) {
 			settingshtml += `<div class="guild-avatar ${enabled[id] ? "enabled" : "disabled"}" guild-id="${id}" style="background-image: ${guilds[id].icon ? "url('https://cdn.discordapp.com/icons/" + id + "/" + guilds[id].icon + ".png')" : ""}">${guilds[id].icon ? "" : guilds[id].acronym}</div>`;
 		}
@@ -202,7 +202,7 @@ class MessageLogger {
 
 		BDFDB.addEventListener(this, settingspanel, "mouseenter", ".guild-avatar", e => {
 			let id = e.currentTarget.getAttribute("guild-id");
-			BDFDB.createTooltip(id == "@me" ? "Direct Messages" : this.GuildStore.getGuild(id).name, e.currentTarget, {type:"top"});
+			BDFDB.createTooltip(id == "@me" ? "Direct Messages" : BDFDB.LibraryModules.GuildStore.getGuild(id).name, e.currentTarget, {type:"top"});
 		});
 		BDFDB.addEventListener(this, settingspanel, "click", ".guild-avatar", e => {
 			let disableoff = !BDFDB.containsClass(e.currentTarget, "disabled");
@@ -251,7 +251,7 @@ class MessageLogger {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -273,24 +273,15 @@ class MessageLogger {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.UserStore = BDFDB.WebModules.findByProperties("getUsers");
-			this.MemberStore = BDFDB.WebModules.findByProperties("getMembers");
-			this.MessageStore = BDFDB.WebModules.findByProperties("getMessages");
-			this.GuildStore = BDFDB.WebModules.findByProperties("getGuilds");
-			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-			this.ChannelStore = BDFDB.WebModules.findByProperties("getChannels");
-			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-			this.MessageUtils = BDFDB.WebModules.findByProperties("receiveMessage");
-
-			this.fs = require("fs");
-			this.path = require("path");
-			this.process = require("process");
-			this.request = require("request");
+			this.fs = BDFDB.LibraryRequires.fs;
+			this.path = BDFDB.LibraryRequires.path;
+			this.process = BDFDB.LibraryRequires.process;
+			this.request = BDFDB.LibraryRequires.request;
 			this.logsfolder = this.path.join(BDFDB.getPluginsFolder(), "Logs");
 			this.loggerqueues = {};
 
 			var logged = [];
-			BDFDB.WebModules.patch(this.MessageUtils, "receiveMessage", this, {after: e => {
+			BDFDB.WebModules.patch(BDFDB.LibraryModules.MessageUtils, "receiveMessage", this, {after: e => {
 				let message = Object.assign({},e.methodArguments[1]);
 				message.guild_id = message.guild_id ? message.guild_id : "@me";
 				if ((message.nonce || message.attachments.length > 0) && !logged.includes(message.id) && BDFDB.loadData(message.guild_id, this, "enabled")) {
@@ -312,12 +303,12 @@ class MessageLogger {
 
 
 	// begin of own functions
-	
-	processHeaderBarContainer (instance, wrapper) {
+
+	processHeaderBarContainer (instance, wrapper, returnvalue) {
 		this.processHeaderBar(instance, wrapper);
 	}
 
-	processHeaderBar (instance, wrapper) {
+	processHeaderBar (instance, wrapper, returnvalue) {
 		if (wrapper.querySelector(".logger-button")) return;
 		let search = wrapper.querySelector(BDFDB.dotCN.channelheadersearch);
 		if (!search) return;
@@ -360,7 +351,7 @@ class MessageLogger {
 		this.request.get({url: url, encoding: 'binary'}, (err, response, body) => {
 			this.fs.writeFile(this.path.join(filepath, filename), body, "binary", (error) => {
 				if (error) console.error("The image could not be archived: " + error);
-			}); 
+			});
 		});
 	}
 
@@ -403,8 +394,8 @@ class MessageLogger {
 	}
 
 	showLogs () {
-		let server = this.LastGuildStore.getGuildId() || "@me";
-		let channel = this.LastChannelStore.getChannelId();
+		let server = BDFDB.LibraryModules.LastGuildStore.getGuildId() || "@me";
+		let channel = BDFDB.LibraryModules.LastChannelStore.getChannelId();
 		if (!channel) return;
 
 		let logs = [];
@@ -421,12 +412,12 @@ class MessageLogger {
 				let authorid = ids[1];
 				let messageid = ids[2];
 				let files = / \(filesML:(.*?)\)/.exec(log) || ["",""];
-				let user = this.UserStore.getUser(authorid);
-				let message = this.MessageStore.getMessage(channel, messageid);
+				let user = BDFDB.LibraryModules.UserStore.getUser(authorid);
+				let message = BDFDB.LibraryModules.MessageStore.getMessage(channel, messageid);
 				if (user) {
 					if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
 					let entry = BDFDB.htmlToElement(this.logEntryMarkup);
-					let member = this.MemberStore.getMember(authorid);
+					let member = BDFDB.LibraryModules.MemberStore.getMember(authorid);
 					let messagestring = message ? message.content : log.replace(ids[0], "").replace(files[0], "").split(": ")[1];
 					let filestring = "";
 					for (let file of files[1].split(" ")) if (file) filestring += `<a title="${file}" class="${BDFDB.disCN.anchor}" href="${file.split("?width=")[0]}" rel="noreferrer noopener" target="_blank" role="button">${file.split("?width=")[0]}</a> `;
