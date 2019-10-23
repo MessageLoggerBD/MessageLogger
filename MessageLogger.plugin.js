@@ -198,25 +198,25 @@ class MessageLogger {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Batch set Guilds:</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorprimary + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} disable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Disable</div></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} enable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Enable</div></button></div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.ListenerUtils.add(this, settingspanel, "mouseenter", ".guild-avatar", e => {
 			let id = e.currentTarget.getAttribute("guild-id");
 			BDFDB.TooltipUtils.create(e.currentTarget, id == "@me" ? "Direct Messages" : BDFDB.LibraryModules.GuildStore.getGuild(id).name, {type:"top"});
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".guild-avatar", e => {
-			let disableoff = !BDFDB.containsClass(e.currentTarget, "disabled");
+			let disableoff = !BDFDB.DOMUtils.containsClass(e.currentTarget, "disabled");
 			let id = e.currentTarget.getAttribute("guild-id");
-			BDFDB.toggleClass(e.currentTarget, "enabled", !disableoff);
-			BDFDB.toggleClass(e.currentTarget, "disabled", disableoff);
+			BDFDB.DOMUtils.toggleClass(e.currentTarget, "enabled", !disableoff);
+			BDFDB.DOMUtils.toggleClass(e.currentTarget, "disabled", disableoff);
 			BDFDB.DataUtils.save(!disableoff, this, "enabled", id);
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".disable-all", e => {
 			let data = BDFDB.DataUtils.load(this, "enabled");
 			settingspanel.querySelectorAll(".guild-avatar").forEach(icon => {
 				data[icon.getAttribute("guild-id")] = false;
-				BDFDB.removeClass(icon, "enabled");
-				BDFDB.addClass(icon, "disabled");
+				BDFDB.DOMUtils.removeClass(icon, "enabled");
+				BDFDB.DOMUtils.addClass(icon, "disabled");
 			});
 			BDFDB.DataUtils.save(data, this, "enabled");
 		});
@@ -224,8 +224,8 @@ class MessageLogger {
 			let data = BDFDB.DataUtils.load(this, "enabled");
 			settingspanel.querySelectorAll(".guild-avatar").forEach(icon => {
 				data[icon.getAttribute("guild-id")] = true;
-				BDFDB.addClass(icon, "enabled");
-				BDFDB.removeClass(icon, "disabled");
+				BDFDB.DOMUtils.addClass(icon, "enabled");
+				BDFDB.DOMUtils.removeClass(icon, "disabled");
 			});
 			BDFDB.DataUtils.save(data, this, "enabled");
 		});
@@ -263,7 +263,7 @@ class MessageLogger {
 			this.path = BDFDB.LibraryRequires.path;
 			this.process = BDFDB.LibraryRequires.process;
 			this.request = BDFDB.LibraryRequires.request;
-			this.logsfolder = this.path.join(BDFDB.BdUtils.getPluginsFolder(), "Logs");
+			this.logsfolder = this.path.join(BDFDB.BDUtils.getPluginsFolder(), "Logs");
 			this.loggerqueues = {};
 
 			var logged = [];
@@ -285,7 +285,7 @@ class MessageLogger {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".logger-button");
+			BDFDB.DOMUtils.remove(".logger-button");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -301,7 +301,7 @@ class MessageLogger {
 		if (wrapper.querySelector(".logger-button")) return;
 		let search = wrapper.querySelector(BDFDB.dotCN.channelheadersearch);
 		if (!search) return;
-		let loggerbutton = BDFDB.htmlToElement(this.loggerButtonMarkup);
+		let loggerbutton = BDFDB.DOMUtils.create(this.loggerButtonMarkup);
 		search.parentElement.insertBefore(loggerbutton, search);
 		let icon = loggerbutton.querySelector(BDFDB.dotCN.channelheadericon);
 		icon.addEventListener("click", () => {
@@ -391,7 +391,7 @@ class MessageLogger {
 		let filepath = this.path.join(this.logsfolder, server, channel + ".txt");
 		if (this.fs.existsSync(filepath)) logs = this.fs.readFileSync(filepath).toString().split("\n");
 
-		let timeLogModal = BDFDB.htmlToElement(this.timeLogModalMarkup);
+		let timeLogModal = BDFDB.DOMUtils.create(this.timeLogModalMarkup);
 
 		let container = timeLogModal.querySelector(".entries");
 		if (!container) return;
@@ -404,15 +404,15 @@ class MessageLogger {
 				let user = BDFDB.LibraryModules.UserStore.getUser(authorid);
 				let message = BDFDB.LibraryModules.MessageStore.getMessage(channel, messageid);
 				if (user) {
-					if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
-					let entry = BDFDB.htmlToElement(this.logEntryMarkup);
+					if (container.childElementCount) container.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+					let entry = BDFDB.DOMUtils.create(this.logEntryMarkup);
 					let member = BDFDB.LibraryModules.MemberStore.getMember(authorid);
 					let messagestring = message ? message.content : log.replace(ids[0], "").replace(files[0], "").split(": ")[1];
 					let filestring = "";
 					for (let file of files[1].split(" ")) if (file) filestring += `<a title="${file}" class="${BDFDB.disCN.anchor}" href="${file.split("?width=")[0]}" rel="noreferrer noopener" target="_blank" role="button">${file.split("?width=")[0]}</a> `;
 
 					let status = entry.querySelector(".log-status");
-					BDFDB.addClass(status, message ? "notdeleted" : "deleted");
+					BDFDB.DOMUtils.addClass(status, message ? "notdeleted" : "deleted");
 					status.addEventListener("mouseenter", () => {BDFDB.TooltipUtils.create(status, message ? "Not Deleted" : "Deleted", {type:"top"});});
 					entry.querySelector(".log-time").innerText = message ? message.timestamp._i.toLocaleString() : log.split(" @ ")[0];
 					entry.querySelector(".log-guild").style.setProperty("background-image", `url(${BDFDB.UserUtils.getAvatar(user.id)})`);
@@ -420,12 +420,12 @@ class MessageLogger {
 					let content = entry.querySelector(".log-content");
 					content.innerText = (member && member.nickname ? member.nickname : user.username) + ": " + (messagestring.replace(/\n/g, " ") + (files[1] ? (" Images: " + files[1]) : "")).trim();
 					content.addEventListener("click", () => {
-						let contentModal = BDFDB.htmlToElement(this.contentModalMarkup);
+						let contentModal = BDFDB.DOMUtils.create(this.contentModalMarkup);
 						let messagecontent = contentModal.querySelector(".message-content");
-						messagecontent.innerHTML = (BDFDB.encodeToHTML(messagestring) + " " + (filestring ? ((messagestring ? "\n" : "") + "Sent Images: " + filestring) : "")).trim();
+						messagecontent.innerHTML = (BDFDB.StringUtils.htmlEscape(messagestring) + " " + (filestring ? ((messagestring ? "\n" : "") + "Sent Images: " + filestring) : "")).trim();
 						BDFDB.ListenerUtils.addToChildren(messagecontent, "click", BDFDB.dotCN.anchor, e => {
 							BDFDB.ListenerUtils.stopEvent(e);
-							let imageModal = BDFDB.htmlToElement(this.imageModalMarkup);
+							let imageModal = BDFDB.DOMUtils.create(this.imageModalMarkup);
 							let link = e.currentTarget;
 							let filename = link.href.split("/");
 							filename = filename[filename.length-2] + "_" + filename[filename.length-1];
