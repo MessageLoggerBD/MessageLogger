@@ -16,9 +16,11 @@ class MessageLogger {
 			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
-		this.patchModules = {
-			"HeaderBar":["componentDidMount","componentDidUpdate"],
-			"HeaderBarContainer":["componentDidMount","componentDidUpdate"]
+		this.patchedModules = {
+			after: {
+				"HeaderBar":["componentDidMount","componentDidUpdate"],
+				"HeaderBarContainer":["componentDidMount","componentDidUpdate"]
+			}
 		};
 	}
 
