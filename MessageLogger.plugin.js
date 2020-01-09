@@ -3,7 +3,7 @@
 class MessageLogger {
 	getName () {return "MessageLogger";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "Unknown";}
 
@@ -156,12 +156,14 @@ class MessageLogger {
 			this.saveGuilds(!BDFDB.ArrayUtils.is(guilds) ? [] : guilds);
 
 			let logged = [];
-			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "receiveMessage", {after: e => {
-				let message = Object.assign({}, e.methodArguments[1]);
-				message.guild_id = message.guild_id || "@me";
-				if ((message.nonce || message.attachments.length > 0) && !logged.includes(message.id) && this.guilds.includes(message.guild_id)) {
-					logged.push(message.id);
-					this.addLog(message);
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {after: e => {
+				if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
+					let message = Object.assign({}, e.methodArguments[0].message);
+					message.guild_id = message.guild_id || "@me";
+					if ((message.nonce || message.attachments.length > 0) && !logged.includes(message.id) && this.guilds.includes(message.guild_id)) {
+						logged.push(message.id);
+						this.addLog(message);
+					}
 				}
 			}});
 
