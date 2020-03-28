@@ -58,9 +58,9 @@ var MessageLogger = (_ =>  {
 
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsGuildList, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsGuildList, {
 				className: BDFDB.disCN.marginbottom20,
 				includeDMs: true,
 				disabled: [BDFDB.DiscordConstants.ME].concat(BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()).filter(n => n && !guilds.includes(n)),
@@ -68,28 +68,28 @@ var MessageLogger = (_ =>  {
 					this.saveGuilds([BDFDB.DiscordConstants.ME].concat(BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()).filter(n => n && !disabledGuilds.includes(n)));
 				}
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 				type: "Button",
 				className: BDFDB.disCN.marginbottom8,
 				color: BDFDB.LibraryComponents.Button.Colors.PRIMARY,
 				label: "Disable for all Servers",
 				onClick: _ => {
-					this.batchSetGuilds(settingspanel, false);
+					this.batchSetGuilds(settingsPanel, false);
 				},
 				children: BDFDB.LanguageUtils.LanguageStrings.DISABLE
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 				type: "Button",
 				className: BDFDB.disCN.marginbottom8,
 				color: BDFDB.LibraryComponents.Button.Colors.GREEN,
 				label: "Enable for all Servers",
 				onClick: _ => {
-					this.batchSetGuilds(settingspanel, true);
+					this.batchSetGuilds(settingsPanel, true);
 				},
 				children: BDFDB.LanguageUtils.LanguageStrings.ENABLE
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy
@@ -183,13 +183,13 @@ var MessageLogger = (_ =>  {
 			}
 		}
 		
-		batchSetGuilds (settingspanel, value) {
+		batchSetGuilds (settingsPanel, value) {
 			if (value) {
 				for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()) guilds.push(id);
 				this.saveGuilds(BDFDB.ArrayUtils.removeCopies(guilds));
 			}
 			else this.saveGuilds([]);
-			BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel);
+			BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
 		}
 		
 		saveGuilds (savedGuilds) {
