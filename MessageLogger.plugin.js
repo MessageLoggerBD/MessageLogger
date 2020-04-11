@@ -92,7 +92,7 @@ var MessageLogger = (_ =>  {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 
 		load () {}
 
@@ -154,7 +154,7 @@ var MessageLogger = (_ =>  {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		processHeaderBarContainer (e) {
 			if (guilds.includes(e.instance.props.guildId || BDFDB.DiscordConstants.ME)) {
@@ -306,7 +306,6 @@ var MessageLogger = (_ =>  {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-											color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
 											className: "log-time",
 											children: message ? message.timestamp._i.toLocaleString() : log.split(" @ ")[0]
 										}),
@@ -317,7 +316,6 @@ var MessageLogger = (_ =>  {
 											size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-											color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
 											children: [
 												BDFDB.ReactUtils.createElement("strong", {
 													className: "log-name",
@@ -391,12 +389,10 @@ var MessageLogger = (_ =>  {
 															children: [
 																content ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 																	className: BDFDB.DOMUtils.formatClassName("log-content", links.length && BDFDB.disCN.marginbottom8),
-																	color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
 																	children: content
 																}) : null,
 																links.length ? [
 																	BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-																		color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
 																		children: "Sent Images: "
 																	}),
 																	links
