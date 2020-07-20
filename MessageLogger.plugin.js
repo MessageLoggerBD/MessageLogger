@@ -158,7 +158,7 @@ var MessageLogger = (_ =>  {
 
 		processHeaderBarContainer (e) {
 			if (guilds.includes(e.instance.props.guildId || BDFDB.DiscordConstants.ME)) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(BDFDB.ReactUtils.getValue(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
+				let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ReactUtils.getValue(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: "Logger",
 					tooltipConfig: {type: "bottom"},
@@ -309,11 +309,11 @@ var MessageLogger = (_ =>  {
 											className: "log-time",
 											children: message ? message.timestamp._i.toLocaleString() : log.split(" @ ")[0]
 										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 											className: "log-user",
 											src: BDFDB.UserUtils.getAvatar(user.id),
 											status: BDFDB.UserUtils.getStatus(user.id),
-											size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
+											size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 											children: [
